@@ -1,0 +1,4 @@
+[03-Aug-2020 19:51:46 UTC] PHP Notice:  Undefined variable: success in /home/kuk6hao3mat3/public_html/dashboard/delFwdContract.php on line 33
+[03-Aug-2020 19:51:46 UTC] PHP Notice:  Undefined variable: error in /home/kuk6hao3mat3/public_html/dashboard/delFwdContract.php on line 33
+[05-Aug-2020 06:50:40 UTC] PHP Notice:  Undefined variable: success in /home/kuk6hao3mat3/public_html/dashboard/updateFwdContract.php on line 44
+[05-Aug-2020 06:50:40 UTC] PHP Notice:  Undefined variable: error in /home/kuk6hao3mat3/public_html/dashboard/updateFwdContract.php on line 44
