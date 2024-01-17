@@ -8,7 +8,7 @@
   if(session_id()=='' || !isset($_SESSION)){
     session_start();
   }
-  error_reporting(0);
+  error_reporting(0);           
 
   $servername = "localhost";
   $username = "ibrlive";
