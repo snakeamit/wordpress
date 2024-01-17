@@ -25,15 +25,15 @@ function sendSmsOtp($userphone, $otp)
 {
   //Initialize cURL.
   //$ch = curl_init();
-  $message = "Dear User,
-  Your OTP for registration to IBRLive portal is $otp . Please do not share this OTP with anyone. IBRLIV";
-  $postParameter = array(
+  $message = "Thank you for choosing IBRLive! Your One-Time Password (OTP) for account registration is:".$otp.". Please enter this OTP on the registration page to verify your account. Learn and spread";
+ 
+ $postParameter = array(
     'username' => 'IBRLIVEIND',
     'password' => 'IBRLIVEIND',
     'drout'    => 3,
-    'senderid'  => 'IBRLIV',
+    'senderid'  => 'IBRLVE',
     'intity_id'  => 1201160750049721812,
-    'template_id'  => 1207167575509144057,
+    'template_id'  => 1207169477708083511,
     'numbers' => $userphone,
     'language'  => 'en',
     'message'  => $message

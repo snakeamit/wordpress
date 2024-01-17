@@ -546,7 +546,7 @@ if (session_id() == '' || !isset($_SESSION)) {
                                 </div>
 
                                 <div class="mt-4 pt-3 text-center">
-                                    <a href="" class="btn btn-primary btn-rounded" data-bs-toggle="modal" data-bs-target="#modalForm">Avail Service</a>
+                                    <a href="https://payment-forms-lrs.cashfree.com/ibr_live" class="btn btn-primary btn-rounded">Avail Service</a>
                                 </div>
                             </div>
                         </div>
@@ -817,3 +817,4 @@ if (session_id() == '' || !isset($_SESSION)) {
             img.src = img.src.substring(0, img.src.lastIndexOf("?")) + "?rand=" + Math.random() * 1000;
         }
     </script>
+

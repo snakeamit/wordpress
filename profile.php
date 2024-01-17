@@ -1809,7 +1809,7 @@ $maxDay = $endSettleDate;
 
             <div class="panel-body">
               <a href="plans-and-pricing"><button style="margin-top: 5px;" type="button" class="btn btn-primary"><i class="fa fa-shopping-cart"> </i> Purchase Subscriptions</button></a>
-              <a href="fxpress"><button style="margin-top: 5px;" type="button" class="btn btn-info"><i class="fa fa-info"> </i> Click for more information on FXPRESS features</button></a>
+              <a href="/forward_rates_new"><button style="margin-top: 5px;" type="button" class="btn btn-info"><i class="fa fa-info"> </i> Click for more information on FXPRESS features</button></a>
               <hr>
               <p class="text-primary"><strong>Features:</strong></p>
               <p class="text-primary"><i class="fa fa-star" style="color: #3c8dbc;"></i> Live Interbank Exchange Rates</p>

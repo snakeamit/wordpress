@@ -1,11 +1,11 @@
 <?php
 
 include_once('lib/database.php');
-if ($_SERVER['HTTPS'] != "on") {
-  $url = "https://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-  header("Location: $url");
-  exit;
-}
+// if ($_SERVER['HTTPS'] != "on") {
+//   $url = "https://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+//   header("Location: $url");
+//   exit;
+// }
 
 if (session_id() == '' || !isset($_SESSION)) {
   session_start();
@@ -13,9 +13,9 @@ if (session_id() == '' || !isset($_SESSION)) {
 error_reporting(E_ALL);
 
 $servername = "localhost";
-$username = "ibrlive";
-$password = "tubelight";
-$dbname = "ibrMock";
+$username = "root";
+$password = "";
+$dbname = "ibrlive";
 $succ = "";
 $err = "";
 $conn = OpenCon();
@@ -1407,7 +1407,7 @@ include("check-FXPRESS.php");
         <div class="card-carousel">
           <div class="card" id="1">
 
-            <a href="https://ibrlive.com/plans-and-pricing#send_money">
+            <a href="https://payment-forms-lrs.cashfree.com/ibr_live">
               <h5>Send Money Abroad</h5>
               <p>Send money to your Loved hassle-free in form of Gift, & Family Maintenance. Remit Education fees, GIC through Flywire, WUBS, CIBC & PayMyTuition
                 Lowest Rate Guaranteed</p>
@@ -3388,8 +3388,13 @@ include("check-FXPRESS.php");
   <script src="bower_components/fastclick/lib/fastclick.js"></script>
   <!-- <script src="js/dist/owl.carousel.min.js"></script> -->
   <script>
+    let autoMoveInterval;
     const cardsContainer = document.querySelector(".card-carousel");
     const cardsController = document.querySelector(".card-carousel + .card-controller")
+    // After creating the CardCarousel instance and setting up the autoMoveInterval, add these event listeners
+
+    
+
 
     class DraggingEvent {
       constructor(target = undefined) {
@@ -3710,9 +3715,35 @@ include("check-FXPRESS.php");
           })
         }
       }
-    }
 
+      // Add this method to the CardCarousel class
+      simulateLeftMovement() {
+        // Simulate a left arrow key press (keyCode 37) to move cards to the left
+        this.controller({ keyCode: 37 });
+      }
+
+    }
+    
     const carousel = new CardCarousel(cardsContainer)
+    autoMoveInterval = setInterval(() => {
+      carousel.simulateLeftMovement();
+    }, 2000); 
+    // Add this code to attach event listeners to each card element
+    const cards = document.querySelectorAll(".card");
+
+    cards.forEach(card => {
+      card.addEventListener("mouseenter", () => {
+        clearInterval(autoMoveInterval); // Stop automatic movement on card hover
+      });
+
+      card.addEventListener("mouseleave", () => {
+        // Restart automatic movement when the mouse leaves the card
+        autoMoveInterval = setInterval(() => {
+          carousel.simulateLeftMovement();
+        }, 2000);
+      });
+});
+
   </script>
   <!-- AdminLTE App -->
   <!-- <script src="dist/js/adminlte.min.js"></script> -->
@@ -3968,3 +3999,4 @@ include("check-FXPRESS.php");
 </body>
 
 </html>
+

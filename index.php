@@ -1,4 +1,5 @@
 <?php
+echo "5555";
     ob_start();
     header("Location: home");
     #header("Location: be-back");

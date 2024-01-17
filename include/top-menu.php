@@ -117,6 +117,7 @@ if (isset($_SESSION['username'])) {
               <a href="/central-bank-interest-rates" class="dropdown-item">Benchmark rate</a>
               <!-- <a href="/plans-and-pricing" class="dropdown-item">Rate Alert</a> -->
               <a href="/ratealerts" class="dropdown-item">Rate Alert</a>
+              <a href="https://payment-forms-lrs.cashfree.com/ibr_live" class="dropdown-item">Send Money Abroad</a>
             </div>
           </div>
           <a href="/lei-code" class="nav-item nav-link">Get LEI</a>

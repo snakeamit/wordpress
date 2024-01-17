@@ -90,11 +90,11 @@ if($result != null){
                 $rate = $rate * $rateUSDINR;
                 
                 $bid = $result->{'currency'}[$i]->{'bid'};
-		#$bid = $bid + 0.02; 
+		          #$bid = $bid + 0.02; 
                 $bid = $bid * $rateUSDINR;
                 
                 $ask= $result->{'currency'}[$i]->{'ask'};
-		#$ask = $ask + 0.02; 
+		          #$ask = $ask + 0.02; 
                 $ask = $ask * $rateUSDINR;
                 
                 $high = $result->{'currency'}[$i]->{'daily_highest'};  
@@ -117,14 +117,14 @@ if($result != null){
                     $rate = "0";
                 
                 $bid = $result->{'currency'}[$i]->{'bid'};
-		#$bid = $bid + 0.02; 
+		            // $bid = $bid + 0.02; 
                 if($bid>0)
                     $bid = ($rate/$rateTemp) * $bid;
                 else
                     $bid = "0";
                 
                 $ask= $result->{'currency'}[$i]->{'ask'};
-		#$ask = $ask + 0.02; 
+		          #$ask = $ask + 0.02; 
                 if($ask>0)
                     #$ask = (1/$ask) * $rateUSDINR;
                     $ask = ($rate/$rateTemp) * $ask;
@@ -147,9 +147,9 @@ if($result != null){
             default:
                 $rate = $result->{'currency'}[$i]->{'value'}; 
                 $bid = $result->{'currency'}[$i]->{'bid'};
-		#$bid = $bid + 0.02; 
+		        #$bid = $bid + 0.02; 
                 $ask= $result->{'currency'}[$i]->{'ask'};
-		#$ask = $ask + 0.02; 
+		        #$ask = $ask + 0.02; 
                 $high = $result->{'currency'}[$i]->{'daily_highest'};  
                 $low = $result->{'currency'}[$i]->{'daily_lowest'}; 
         }

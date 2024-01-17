@@ -188,21 +188,178 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           $qty = 1;
           $sql3 = "INSERT INTO order_items (order_id, product_id, quantity) VALUES ('$coid', '$pid', '$qty')";
 
-          $validity = 10;
-          $expiredate = date('Y-m-d', strtotime("+10 day"));
+          $validity = 0;
+          $expiredate = date('Y-m-d', strtotime("+0 day"));
 
           if ($conn->query($sql3) == TRUE) {
             $sts2 = "AVAILABLE";
-            $sql4 = "INSERT INTO subscription (customer_id, order_id, product_id, paid_on, expire_on, status) VALUES ('$ccid', '$coid', '$pid', '$dateToday', '$expiredate', '$sts2')";
+            $sql4 = "INSERT INTO subscription (customer_id, order_id, product_id, paid_on, expire_on, status) VALUES ('$ccid', '$coid', '$pid', '$dateToday', '$expiredate', 'EXPIRED')";
             if ($conn->query($sql4) == TRUE) {
             }
           }
         }
       }
+      function random_str(
+        int $length = 64,
+        string $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+      ): string {
+        if ($length < 1) {
+          throw new \RangeException("Length must be a positive integer");
+        }
+        $pieces = [];
+        $max = mb_strlen($keyspace, '8bit') - 1;
+        for ($i = 0; $i < $length; ++$i) {
+          $pieces[] = $keyspace[random_int(0, $max)];
+        }
+        return implode('', $pieces);
+      }
+
+      if (isset($_POST['emailuser'])) {
+        
+      
+        $error = "";
+        $success = "";
+      
+        $hash = "";
+        $allow = "";
+        $email = $_POST['emailuser'];
+        #$conn->query('SET NAMES utf8');
+      
+        #$email = mysql_real_escape_string("\xbf\x27 OR 1=1 /*");
+        #$email = $conn->real_escape_string("OR 1=1 /*");
+      
+        if ($email == "") {
+          exit();
+        }
+      
+        if ($error == "") {
+          $sql = "SELECT id, name, phone, paid, created, validity, amount, password FROM customers WHERE email='$email'";
+          $result = $conn->query($sql);
+      
+          if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+              $hash = $row['password'];
+              $_SESSION['userid'] = $row['id'];
+              $_SESSION['sessCustomerID'] = $row['id'];
+              $_SESSION['userallow'] = $row['paid'];
+              $_SESSION['username'] = $row['name'];
+              $_SESSION['useremail'] = $email;
+              $_SESSION['userphone'] = $row['phone'];
+            }
+      
+            date_default_timezone_set('Asia/Kolkata');
+            $ldate = date('d-m-Y h:i:s A', time());
+      
+            $uip = $_SERVER['REMOTE_ADDR'];
+      
+            $sql = "INSERT INTO userlog (userEmail,userip,loginTime,logout,status) VALUES ('$email', '$uip','$ldate','',0)";
+      
+            if ($conn->query($sql) === TRUE) {
+              $successLog = "User log successfully!";
+            }
+          } else {
+            $error = "Invalid Email or Password";
+          }
+        }
+      
+        $custId = $_SESSION['sessCustomerID'];
+        //$dateNow = date();
+        $date = new DateTime('now', new DateTimeZone('Asia/Kolkata'));
+        $dateNow = $date->format('Y-m-d');
+      
+        if ($custId) {
+          $sql2 = "SELECT * FROM `subscription` WHERE customer_id='$custId' AND status='AVAILABLE' AND expire_on >= '$dateNow' AND product_id>='1' AND product_id<='3' ORDER BY product_id DESC";
+          $result2 = $conn->query($sql2);
+      
+          if ($result2->num_rows > 0) {
+            $_SESSION['MFEXAM'] = "AVAILABLE";
+          } else {
+            $_SESSION['MFEXAM'] = "NOTAVAILABLE";
+          }
+      
+          $sql3 = "SELECT * FROM `subscription` WHERE customer_id='$custId' AND status='AVAILABLE' AND expire_on >= '$dateNow' AND product_id>='4' AND product_id<='6' ORDER BY product_id DESC";
+          $result3 = $conn->query($sql3);
+      
+          if ($result3->num_rows > 0) {
+            $_SESSION['FEEXAM'] = "AVAILABLE";
+          } else {
+            $_SESSION['FEEXAM'] = "NOTAVAILABLE";
+          }
+      
+          $sql4 = "SELECT * FROM `subscription` WHERE customer_id='$custId' AND status='AVAILABLE' AND expire_on >= '$dateNow' AND product_id='7' ";
+          $result4 = $conn->query($sql4);
+      
+          if ($result4->num_rows > 0) {
+            $_SESSION['FXPRESS'] = "AVAILABLE";
+          } else {
+            $_SESSION['FXPRESS'] = "NOTAVAILABLE";
+          }
+      
+          // For the Subscription validation checking purpose use
+          $sql5 = "SELECT * FROM `subscription` WHERE customer_id='$custId' AND status='AVAILABLE' AND expire_on >= '$dateNow' ";
+          $result5 = $conn->query($sql5);
+      
+          if ($result5->num_rows > 0) {
+            $_SESSION['SUBSCRIPTION_CHECKING'] = "AVAILABLE";
+          } else {
+            $_SESSION['SUBSCRIPTION_CHECKING'] = "NOTAVAILABLE";
+          }
+        }
+      
+        if ($hash == "") {
+          $error = "Invalid Email or Password";
+        } else {
+          $auth = password_verify($_POST['passworduser'], $hash);
+          if ($auth == 1) {
+            $allow;
+            $success = "Authentication successful";
+      
+            $randToken = random_str(15);
+            $tokenHash = password_hash($randToken, PASSWORD_DEFAULT);
+      
+            $sql_i = "update customers set passcookie='$tokenHash' WHERE email='$email' ";
+            $res = $conn->query($sql_i);
+            if ($res) {
+              if (!empty($_POST["remember"])) {
+                setcookie("email", "$email", time() + 108000, "/", "", 1);
+                setcookie("token", "$randToken", time() + 108000, "/", "", 1);
+              } else {
+                if (isset($_COOKIE['email'])) {
+                  setcookie("email", "", time() - 60, "/", "", 1);
+                  setcookie("token", "", time() - 60, "/", "", 1);
+                }
+              }
+            }
+      
+            $conn->close();
+            // header('Location: forward-rates.php');
+            $subcription_chk = $_SESSION['SUBSCRIPTION_CHECKING'];
+            if($subcription_chk === "AVAILABLE"){
+              header('Location: forward-rates.php');
+            }
+            if($subcription_chk === "NOTAVAILABLE"){
+              header('Location: plans-and-pricing.php');
+            }  
+            exit();
+          } else {
+            $user = "";
+            $allow = "";
+            unset($_SESSION['username']);
+            unset($_SESSION['userallow']);
+            unset($_SESSION['member']);
+            unset($_SESSION['MFEXAM']);
+            unset($_SESSION['FEEXAM']);
+            unset($_SESSION['FXPRESS']);
+            $error = "Authentication Failed";
+          }
+        }
+      
+        $conn->close();
+      }
 
 
       $conn->close();
-      header('Location: register-success.php');
+      
       exit();
     } else {
       #$error = "Error: Email already exist!";
